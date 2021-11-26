@@ -70,7 +70,7 @@ public class ScreenInterfaz extends javax.swing.JFrame {
     private void initMyComponents(){
         TextNomArch.setEditable(false);
         //TextExpRe.setEditable(false); Borrado no me sirve en esta version
-        AreaArchivo.setEditable(false);
+        AreaArchivo.setEditable(true);
         BtnNewFile.setEnabled(false);
         //BtnCompExp.setEnabled(false); Borrado no me sirve en esta version
         AreaArchivo.setText("");
@@ -78,7 +78,7 @@ public class ScreenInterfaz extends javax.swing.JFrame {
         BtnSelecArch.setEnabled(true);
         txtResultado.setEditable(false);
         txtSintaxis.setEditable(false);
-        BAnalizar.setEnabled(false);
+        BAnalizar.setEnabled(true);
         txtResultado.setText("");
         txtSintaxis.setText("");
         
@@ -211,6 +211,7 @@ public class ScreenInterfaz extends javax.swing.JFrame {
             BtnNewFile.setEnabled(true);
             BtnSelecArch.setEnabled(false);
             BAnalizar.setEnabled(true);
+            TextNomArch.setText(archivo.getAbsolutePath());
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ScreenInterfaz.class.getName()).log(Level.SEVERE, null, ex);
@@ -480,6 +481,12 @@ public class ScreenInterfaz extends javax.swing.JFrame {
                     break;
                 case Numero:
                     resultado += "  <Numero>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Coma_Simple:
+                    resultado += "  <Coma>\t" + lexer.lexeme + "\n";
+                    break;
+                case Dos_Puntos:
+                    resultado += "  <Dos Puntos>\t" + lexer.lexeme + "\n";
                     break;
                 case ERROR:
                     resultado += "  <Simbolo no definido>\n";

@@ -18,16 +18,21 @@ parser code
 terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
-    Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
+    Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Dos_Puntos, Coma_Simple, Identificador,
     Numero, ERROR;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
-    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR;
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, groupJSON;
 
 start with INICIO;
 
 INICIO ::= 
     Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
-    Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
+    Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+
+    Llave_a SENTENCIA Llave_c |
+    Llave_a Comillas Identificador Comillas Dos_Puntos Corchete_a SENTENCIA Corchete_c Llave_c |
+    Llave_a Comillas Identificador Comillas Dos_Puntos Llave_a SENTENCIA Llave_c Llave_c
+
 ;
 SENTENCIA ::= 
     SENTENCIA DECLARACION |
@@ -38,12 +43,17 @@ SENTENCIA ::=
     IF_ELSE |
     SENTENCIA WHILE |
     WHILE |
-    SENTENCIA DO_WHILE
+    SENTENCIA DO_WHILE |
     DO_WHILE |
     SENTENCIA FOR |
-    FOR
+    FOR |
+
+    SENTENCIA groupJSON |
+    groupJSON 
+    
 ;
 DECLARACION ::= 
+    Resta Numero |
     Int Identificador P_coma | 
     Int Identificador Op_atribucion Numero P_coma |
     Int Identificador Igual Numero P_coma |
@@ -57,10 +67,30 @@ DECLARACION ::=
     Cadena Identificador Op_atribucion Comillas Comillas P_coma |
     Cadena Identificador Igual Comillas Comillas P_coma |
     Cadena Identificador Op_atribucion Comillas Identificador Comillas P_coma |
-    Cadena Identificador Igual Comillas Identificador Comillas P_coma
+    Cadena Identificador Igual Comillas Identificador Comillas P_coma |
+    Cadena Identificador Igual Comillas Identificador Comillas Coma_Simple |
+   
+    Identificador Dos_Puntos Numero Coma_Simple |
+    Identificador Dos_Puntos Comillas Identificador Comillas Coma_Simple |
+    Identificador Dos_Puntos Op_booleano Coma_Simple |
+    Comillas Identificador Comillas Dos_Puntos Comillas Identificador Comillas Coma_Simple |
+    Comillas Identificador Comillas Dos_Puntos Numero Coma_Simple |
+    Comillas Identificador Comillas Dos_Puntos Op_booleano Coma_Simple |
+
+    Comillas Identificador Comillas Dos_Puntos Resta Numero Coma_Simple
+    
+    
+
+    
 ;
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
 ;
+
+groupJSON ::= 
+   Llave_a SENTENCIA Llave_c Coma_Simple |
+   Llave_a SENTENCIA Llave_c
+;
+
 SENTENCIA_BOOLEANA ::= 
     Op_booleano | 
     Identificador Op_relacional Op_booleano |

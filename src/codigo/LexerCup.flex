@@ -9,7 +9,7 @@ import java_cup.runtime.Symbol;
 %char
 L=[a-zA-Z_]+
 D=[0-9]+
-espacio=[ ,\t,\r,\n]+
+espacio=[ \t\r\n]+
 %{
     private Symbol symbol(int type, Object value){
         return new Symbol(type, yyline, yycolumn, value);
@@ -112,6 +112,12 @@ espacio=[ ,\t,\r,\n]+
 
 /* Numero */
 ("(-"{D}+")")|{D}+ {return new Symbol(sym.Numero, yychar, yyline, yytext());}
+
+/* Dos puntos */
+( ":" ) {return new Symbol(sym.Dos_Puntos, yychar, yyline, yytext());}
+
+/* Coma */
+( "," ) {return new Symbol(sym.Coma_Simple, yychar, yyline, yytext());}
 
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}
